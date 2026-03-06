@@ -1,0 +1,32 @@
+<Project>
+	<Target Name="DevToolsInstall"
+		BeforeTargets="Restore;CollectPackageReferences"
+		Condition="'$(CI)' == ''"
+          >
+
+		<Exec Command="node --version"
+			  Condition="'$(MSBuildProjectDirectory)' == '$(MSBuildThisFileDirectory)'"
+			  StandardOutputImportance="Low"
+			  ContinueOnError="true">
+			<Output TaskParameter="ExitCode" PropertyName="NodeExitCode" />
+		</Exec>
+
+		<Error Condition="'$(NodeExitCode)' != '0' AND '$(MSBuildProjectDirectory)' == '$(MSBuildThisFileDirectory)'"
+			   Text="Node.js no está instalado. Descargarlo desde https://nodejs.org" />
+
+		<Exec Command="npm install"
+			  Condition="'$(MSBuildProjectDirectory)' == '$(MSBuildThisFileDirectory)' AND
+                     (!Exists('$(MSBuildThisFileDirectory)node_modules/.install-stamp') OR
+                     $([System.IO.File]::GetLastWriteTime('$(MSBuildThisFileDirectory)package.json').Ticks)
+                     &gt;
+                     $([System.IO.File]::GetLastWriteTime('$(MSBuildThisFileDirectory)node_modules/.install-stamp').Ticks))"
+			  StandardOutputImportance="Low" />
+
+		<Touch Files="$(MSBuildThisFileDirectory)node_modules/.install-stamp"
+			   AlwaysCreate="true"
+			   Condition="'$(MSBuildProjectDirectory)' == '$(MSBuildThisFileDirectory)'" />
+
+	</Target>
+
+
+</Project>
