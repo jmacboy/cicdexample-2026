@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Repositorio de ejemplo para Integración continua",
   "main": "index.js",
-    "scripts": {
+  "scripts": {
     "prepare": "husky"
   },
   "devDependencies": {
