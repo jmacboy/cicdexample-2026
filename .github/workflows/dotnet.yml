@@ -27,6 +27,9 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal Inventory.Test --collect:"XPlat Code Coverage" --results-directory ./coverage
 
+    - name: Install ReportGenerator
+      run: dotnet tool restore
+
     - name: Generate coverage report
       run: >
           dotnet tool run reportgenerator
