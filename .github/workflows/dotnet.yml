@@ -77,6 +77,8 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: dotnet sonarscanner end /d:sonar.token="$SONAR_TOKEN"
 
+    - name: Restore dotnet tools        # ← agregar este step
+      run: dotnet tool restore
 
     - name: Generate coverage report
       run: >
