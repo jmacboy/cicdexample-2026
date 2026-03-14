@@ -22,6 +22,7 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
+          command_timeout: 1m 
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             bash /home/buildapp/example.sh
