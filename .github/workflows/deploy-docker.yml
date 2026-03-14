@@ -28,4 +28,4 @@ jobs:
           END
           ssh-keyscan -H $SSH_HOST >> ~/.ssh/known_hosts
       - name: Reload server
-        run: ssh staging 'whoami'
+        run: ssh staging 'bash /home/buildapp/deploy.sh'
