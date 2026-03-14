@@ -24,4 +24,4 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            bash /home/buildapp/deploy.sh
+            bash /home/buildapp/example.sh
