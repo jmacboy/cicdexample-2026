@@ -11,21 +11,18 @@ jobs:
 
     steps:
       - name: Configure SSH
-        env:
-          SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-          SSH_USER: ${{ secrets.SSH_USER }}
         run: |
-          mkdir -p ~/.ssh/
-          echo "$SSH_KEY" > ~/.ssh/staging.key
-          chmod 600 ~/.ssh/staging.key
-          cat >>~/.ssh/config <<END
-            Host staging
-              HostName $SSH_HOST
-              User $SSH_USER
-              IdentityFile ~/.ssh/staging.key
-              StrictHostKeyChecking no
-          END
-          ssh-keyscan -H $SSH_HOST >> ~/.ssh/known_hosts
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
       - name: Reload server
-        run: ssh staging 'bash /home/buildapp/deploy.sh'
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          command_timeout: 1m 
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            bash /home/buildapp/deploy.sh
