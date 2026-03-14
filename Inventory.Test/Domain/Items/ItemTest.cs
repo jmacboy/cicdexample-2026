@@ -148,6 +148,8 @@ namespace Inventory.Test.Domain.Items
 
         }
         [Fact]
+        [Trait("Category", "Unit")]
+
         public void Item_AddStock_OtherCostStrategy()
         {
             var guid = Guid.NewGuid();
