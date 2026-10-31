@@ -17,7 +17,15 @@ internal class GetItemsHandler : IRequestHandler<GetItemsQuery, Result<ICollecti
 
     public async Task<Result<ICollection<ItemDto>>> Handle(GetItemsQuery request, CancellationToken cancellationToken)
     {
-        return await _dbContext.Item.AsNoTracking().
+        var items = _dbContext.Item.AsNoTracking();
+
+        if (!string.IsNullOrWhiteSpace(request.searchTerm))
+        {
+            var term = request.searchTerm.Trim().ToLower();
+            items = items.Where(i => i.ItemName.ToLower().Contains(term));
+        }
+
+        return await items.
             Select(i => new ItemDto()
             {
                 Id = i.Id,
